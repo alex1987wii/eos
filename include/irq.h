@@ -35,6 +35,10 @@ struct irq {
 	struct irq_desc *irq_chain;
 };
 
+extern bit in_irq;
+
+#define in_interrupt()	in_irq
+
 void irq_init(void);
 void enable_irq(u8 irq);
 void disable_irq(u8 irq);

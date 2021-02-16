@@ -27,6 +27,8 @@ typedef enum {
 #define LED_HC595_NR	8
 #define LED_HC595_PINS_NR	3
 
+#define led_debug(id)	led_on(id)
+
 typedef enum {
 	LED_TYPE_IO = 0,
 	LED_TYPE_HC595,	

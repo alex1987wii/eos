@@ -5,10 +5,15 @@
 
 #define IRQ_NR	5
 
+bit in_irq;
 static data struct irq irqs[IRQ_NR];
 static code u8 irq_priority[IRQ_NR] = {
 	0, 1, 0, 1, 0,
 };
+
+
+#define enter_irq()		do { lock_kernel(); in_irq = 1;} while (0)
+#define exit_irq()		do { in_irq = 0; unlock_kernel();} while (0)
 
 static void set_irq_trigger(u8 irq, u8 flags)
 {
@@ -128,54 +133,44 @@ void disable_irq(u8 irq)
 	}
 }
 
-void irq0_handler(void) interrupt 0
+static void generic_irq_handler(int irq)
 {
-	struct irq_desc *idesc = irqs[0].irq_chain;
+	struct irq_desc *idesc;
+
+	enter_irq();
+
+	idesc = irqs[irq].irq_chain;
 	while (idesc) {
 		if (idesc->handler(idesc->private) == IRQ_HANDLED)
 			break;
 		idesc = idesc->next;		
 	}
+
+	exit_irq();
+}
+void irq0_handler(void) interrupt 0
+{
+	generic_irq_handler(0);
 }
 
 void irq1_handler(void) interrupt 1
 {
-	struct irq_desc *idesc = irqs[1].irq_chain;
-	while (idesc) {
-		if (idesc->handler(idesc->private) == IRQ_HANDLED)
-			break;
-		idesc = idesc->next;		
-	}
+	generic_irq_handler(1);
 }
 
 void irq2_handler(void) interrupt 2
 {
-	struct irq_desc *idesc = irqs[2].irq_chain;
-	while (idesc) {
-		if (idesc->handler(idesc->private) == IRQ_HANDLED)
-			break;
-		idesc = idesc->next;		
-	}
+	generic_irq_handler(2);
 }
 
 void irq3_handler(void) interrupt 3
 {
-	struct irq_desc *idesc = irqs[3].irq_chain;
-	while (idesc) {
-		if (idesc->handler(idesc->private) == IRQ_HANDLED)
-			break;
-		idesc = idesc->next;		
-	}
+	generic_irq_handler(3);
 }
 
 void irq4_handler(void) interrupt 4
 {
-	struct irq_desc *idesc = irqs[4].irq_chain;
-	while (idesc) {
-		if (idesc->handler(idesc->private) == IRQ_HANDLED)
-			break;
-		idesc = idesc->next;		
-	}
+	generic_irq_handler(4);
 }
 
 s8 request_irq(u8 irq, u8 flags, irq_handler_t handler, const char *name, void *private)
@@ -252,5 +247,6 @@ void irq_init(void)
 	for (i = 0; i < IRQ_NR; ++i) {
 		set_irq_priority(i, irq_priority[i]); 
 	}
+	in_irq = 0;
 	irq_enable();
 }

@@ -431,6 +431,11 @@
               <FileType>5</FileType>
               <FilePath>.\include\hw_timer.h</FilePath>
             </File>
+            <File>
+              <FileName>memory.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\include\memory.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -565,6 +570,11 @@
               <FileName>hw_timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\kernel\hw_timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>memory.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\kernel\memory.c</FilePath>
             </File>
           </Files>
         </Group>

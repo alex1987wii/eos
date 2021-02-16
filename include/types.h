@@ -10,4 +10,8 @@ typedef signed long	s32;
 
 typedef u8 bool;
 
+typedef void * code code_ptr_t;
+typedef void * pdata pdata_ptr_t;
+typedef void * data data_ptr_t;
+
 #endif
