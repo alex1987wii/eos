@@ -22,12 +22,7 @@ enum {
 #define set_timer0_counter(expire)		do { u16 value = 0xffff - expire + 1; TH0 = value >> 8; TL0 = value & 0xff; } while (0)
 /* CAUTIONS: must pass variable name to this macro, and the value will store into it */
 #define get_timer0_counter(value)		do { (value) = 0xffff - (TH0 << 8); ++(value); (value) -= TL0; } while (0)
-
-/* to be fixup */
-#define set_timer1_counter(expire)		do { u16 value = 0xffff - expire + 1; TH1 = value >> 8; TL1 = value & 0xff; } while (0)
-/* CAUTIONS: must pass variable name to this macro, and the value will store into it */
-#define get_timer1_counter(value)		do { (value) = 0xffff - (TH1 << 8); ++(value); (value) -= TL1; } while (0)
-			
+		
 #define enable_timer0()					(TR0 = 1)				
 #define disable_timer0()				(TR0 = 0)
 #define enable_timer1()					(TR1 = 1)
